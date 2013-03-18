@@ -1,4 +1,5 @@
 from __future__ import absolute_import, unicode_literals
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 try:
@@ -6,6 +7,9 @@ try:
 except ImportError:
     from datetime import datetime
     now = datetime.now
+
+
+UserModel = getattr(settings, "AUTH_USER_MODEL", "auth.User")
 
 
 class WizardState(models.Model):
@@ -19,7 +23,7 @@ class WizardState(models.Model):
     name = models.CharField(max_length=200)
     namespace = models.CharField(max_length=200)
     session_key = models.CharField(max_length=40, blank=True)
-    user = models.ForeignKey('auth.User', blank=True, null=True)
+    user = models.ForeignKey(UserModel, blank=True, null=True)
     data = models.TextField(default='{"current_step":null,"steps":{}}')
     created_at = models.DateTimeField(default=now)
     modified_at = models.DateTimeField(auto_now=True)

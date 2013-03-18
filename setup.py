@@ -3,12 +3,12 @@ from setuptools import setup, find_packages
 
 setup(
     name='django-formwizard',
-    version='1.3.10',
+    version='1.4.0',
     description='A FormWizard for Django with multiple storage backends',
     long_description=open("README.rst").read(),
-    author='Bradley Ayers',
-    author_email='bradley.ayers@gmail.com',
-    url='http://github.com/bradleyayers/django-formwizard/',
+    author='Sunny Phung',
+    author_email='sunnyphung123@gmail.com',
+    url='https://github.com/SunnySydeUp/django-formwizard/',
     packages=find_packages(exclude=['tests', 'tests.*']),
     include_package_data=True,  # declarations in MANIFEST.in
 

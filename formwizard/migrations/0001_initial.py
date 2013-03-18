@@ -4,6 +4,14 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+try:
+    from django.contrib.auth import get_user_model
+except ImportError:  # django < 1.5
+    from django.contrib.auth.models import User
+else:
+    User = get_user_model()
+
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
@@ -14,7 +22,7 @@ class Migration(SchemaMigration):
             ('name', self.gf('django.db.models.fields.CharField')(max_length=200)),
             ('namespace', self.gf('django.db.models.fields.CharField')(max_length=200)),
             ('session_key', self.gf('django.db.models.fields.CharField')(max_length=40, blank=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm["%s.%s" % (User._meta.app_label, User._meta.object_name)], null=True, blank=True)),
             ('data', self.gf('django.db.models.fields.TextField')(default=u'{"current_step":null,"steps":{}}')),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
             ('modified_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
@@ -24,7 +32,6 @@ class Migration(SchemaMigration):
         # Adding unique constraint on 'WizardState', fields ['name', 'namespace']
         db.create_unique('formwizard_wizardstate', ['name', 'namespace'])
 
-
     def backwards(self, orm):
 
         # Removing unique constraint on 'WizardState', fields ['name', 'namespace']
@@ -32,7 +39,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'WizardState'
         db.delete_table('formwizard_wizardstate')
-
 
     models = {
         'auth.group': {
@@ -48,7 +54,7 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
-        'auth.user': {
+        "%s.%s" % (User._meta.app_label, User._meta.module_name): {
             'Meta': {'object_name': 'User'},
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
@@ -80,7 +86,7 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'namespace': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'session_key': ('django.db.models.fields.CharField', [], {'max_length': '40', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['%s.%s']" % (User._meta.app_label, User._meta.object_name), 'null': 'True', 'blank': 'True'})
         }
     }
 

@@ -43,6 +43,11 @@ commit your changes. Don't forget to send a pull request.
 Changes
 =======
 
+v1.4.0
+------
+
+- Use Django 1.5's custom auth model if available.
+
 v1.3.10
 -------
 
